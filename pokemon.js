@@ -12,18 +12,32 @@ String.prototype.capitalize = function() {
     +this.slice(1)
 }
     
+// function getPokemonData(name){
+//     return fetch('https://pokeapi.co/api/v2/pokemon/ditto')
+//     // this then handle the promise return by fetch
+//         .then(response => response.json())
+//     }
+    
+async function getPokemonData(name){
+    // await waits for promise to resolve , then return the resolved value
+    const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`)
+    const data = await res.json()
+    return data
+    }
 
-fetch('https://pokeapi.co/api/v2/pokemon/ditto')
-// this then handle the promise return by fetch
-    .then(response => response.json()
-        // this then hadles the promise return by text
-            .then(data => {
-                // update the text of pokemon name with the name from the data
-                // 1. get the dom node for pokemon name
-                const pokemonName = document.querySelector('#pokemon-name') 
-                // 2. Set innerText on pokemonName to data.name
-                data.name[0] = data.name[0].toUpperCase()
-                
-            })
-)
+// Get pokemon data when the user click the button
+// 1. Get the DOM node for the button
+const btnGetPokemon = document.querySelector('#get-pokemon')
+// 2. Attach an click event listener to the button
+btnGetPokemon.addEventListener('click', async() => {
+    const data = await getPokemonData('Squirtle')
+    // this then hadles the promise return by text
+        // update the text of pokemon name with the name from the data
+        // 1. get the dom node for pokemon name
+        const pokemonName = document.querySelector('#pokemon-name') 
+            // 2. Set innerText on pokemonName to data.name
+        pokemonName.innerText = `Pokemon Name: ${data.name.capitalize()}`
+
+})
+
 console.log('Awaiting fetch...')
